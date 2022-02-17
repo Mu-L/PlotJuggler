@@ -11,7 +11,6 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QDir>
-#include <QScopeGuard>
 
 #include "sentry.h"
 
