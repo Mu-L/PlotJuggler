@@ -700,10 +700,10 @@ void MainWindow::initializePlugins()
     connect(action, &QAction::triggered, toolbox_ptr, &ToolboxPlugin::onShowWidget);
 
     connect(action, &QAction::triggered, this,
-            [=]() { ui->widgetStack->setCurrentIndex(new_index); });
+            [this, new_index]() { ui->widgetStack->setCurrentIndex(new_index); });
 
     connect(toolbox_ptr, &ToolboxPlugin::closed, this,
-            [=]() { ui->widgetStack->setCurrentIndex(0); });
+            [this]() { ui->widgetStack->setCurrentIndex(0); });
 
     connect(toolbox_ptr, &ToolboxPlugin::importData, this,
             [this](PlotDataMapRef& new_data, bool remove_old) {
@@ -833,7 +833,7 @@ void MainWindow::onPlotAdded(PlotWidget* plot)
   connect(plot, &PlotWidget::curvesDropped, _curvelist_widget, &CurveListPanel::clearSelections);
 
   connect(plot, &PlotWidget::legendSizeChanged, this, [=](int point_size) {
-    auto visitor = [=](PlotWidget* p) {
+    auto visitor = [this, plot, point_size](PlotWidget* p) {
       if (plot != p)
       {
         p->setLegendSize(point_size);
