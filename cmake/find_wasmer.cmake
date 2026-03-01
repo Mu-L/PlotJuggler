@@ -17,10 +17,15 @@ function(find_wasmer)
   if(WASMER_INCLUDE_DIR AND WASMER_LIBRARY)
     message(STATUS "Found wasmer: ${WASMER_LIBRARY} (include: ${WASMER_INCLUDE_DIR})")
 
+    set(WASMER_LINK_LIBRARIES "${WASMER_LIBRARY}")
+    if(NOT WIN32)
+      list(APPEND WASMER_LINK_LIBRARIES pthread dl m)
+    endif()
+
     add_library(wasmer::wasmer INTERFACE IMPORTED)
     set_target_properties(wasmer::wasmer PROPERTIES
         INTERFACE_INCLUDE_DIRECTORIES "${WASMER_INCLUDE_DIR}"
-        INTERFACE_LINK_LIBRARIES "${WASMER_LIBRARY};pthread;dl;m")
+        INTERFACE_LINK_LIBRARIES "${WASMER_LINK_LIBRARIES}")
 
     set(wasmer_FOUND TRUE PARENT_SCOPE)
   else()

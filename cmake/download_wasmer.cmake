@@ -61,12 +61,14 @@ function(download_wasmer)
     message(ERROR "wasmer library not found: ${wasmer_SOURCE_DIR}/lib/${WASMER_STATIC_LIBRARY_NAME}")
   endif()
 
-  set(WASMER_LINK_LIBRARIES ${wasmer_SOURCE_DIR}/lib/${WASMER_STATIC_LIBRARY_NAME};pthread;dl;m)
+  set(WASMER_LINK_LIBRARIES ${wasmer_SOURCE_DIR}/lib/${WASMER_STATIC_LIBRARY_NAME})
   set(WASMER_COMPILE_DEFINITIONS "")
 
   if(WIN32)
     list(APPEND WASMER_LINK_LIBRARIES ws2_32 advapi32 userenv ntdll bcrypt)
     list(APPEND WASMER_COMPILE_DEFINITIONS WASM_API_EXTERN= WASI_API_EXTERN=)
+  else()
+    list(APPEND WASMER_LINK_LIBRARIES pthread dl m)
   endif()
 
   set_target_properties(wasmer::wasmer PROPERTIES
